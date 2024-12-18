@@ -1,6 +1,6 @@
 ---
 layout: ../layouts/Layout.astro
-title: Academic Project Page Template
+title: 'HomuGAN: A 3D-aware GAN with the Method of Cylindrical Spatial-Constrained Sampling'
 description: Simple project page template for your research paper, built with Astro and Tailwind CSS
 favicon: favicon.svg
 thumbnail: screenshot.png
@@ -19,7 +19,31 @@ import YouTubeVideo from "../components/YouTubeVideo.astro";
 import LaTeX from "../components/LaTeX.astro";
 
 import outside from "../assets/outside.mp4";
-import transformer from "../assets/transformer.webp";
+import arch_png from "../assets/图片1.jpg";
+import sample_png from "../assets/sample.png";
+import bubble_png from "../assets/bubbles.png";
+import bubble2_png from "../assets/bubbles2.png";
+import stylematrix_png from "../assets/style_matrix.png";
+import stylenerf_png from "../assets/stylenerf.png";
+import xiaobo_png from "../assets/xiaobo.png";
+import freq_at_png from "../assets/freq_at.png";
+import cylinder_good_png from "../assets/cylinder_good.png";
+import comp_png from "../assets/comp.png";
+import control_png from "../assets/control.png";
+import colmap_png from "../assets/colmap.png";
+import table_png from "../assets/table.png";
+import bb_png from "../assets/bb.png";
+import mrc_comp_png from "../assets/mrc_comp.png";
+import consis_table_png from "../assets/consis_table.png";
+import control_table_png from "../assets/control_table.png";
+import stable_png from "../assets/stable.png";
+import style_inject_png from "../assets/style_inject.png";
+import feat_comp_png from "../assets/feat_comp.png";
+import local_png from "../assets/local.png";
+import local_car_png from "../assets/local_car.png";
+import rot_miss_png from "../assets/rot_miss.png";
+import diff_sample_png from "../assets/diff_sample.png";
+import sampling2_png from "../assets/sampling2.png";
 import Splat from "../components/Splat.tsx"
 
 import CodeBlock from "../components/CodeBlock.astro";
@@ -30,35 +54,36 @@ export const components = {pre: CodeBlock, table: Table}
   title={frontmatter.title}
   authors={[
     {
-      name: "Roman Hauksson",
-      url: "https://roman.technology",
-      institution: "Independent",
-      notes: ["*", "†"],
+      name: "Haochen Yu",
+      url: "https://yuyuyu223.github.io/howsenfisher.github.io/",
+      institution: "University of Science and Technology Beijing",
+      notes: ["*"],
     },
     {
-      name: "Author Two",
-      institution: "Institution Two",
-      notes: ["*", "†"],
+      name: "Weixi Gong",
+      institution: "University of Science and Technology Beijing",
+      notes: [],
     },
     {
-      name: "Author Three",
-      institution: "Institution Three",
+      name: "Jiansheng Chen",
+      institution: "University of Science and Technology Beijing",
+      notes: [],
+    },
+    {
+      name: "Huimin Ma",
+      institution: "University of Science and Technology Beijing",
       notes: ["†"],
     },
-    {
-      name: "Author Four",
-      institution: "Institution Four",
-    },
   ]}
-  conference="Conference Name"
+  conference="TIP 2024"
   notes={[
     {
       symbol: "*",
-      text: "author note one",
+      text: "First author",
     },
     {
       symbol: "†",
-      text: "author note two",
+      text: "Corresponding author",
     },
   ]}
   links={[
@@ -69,7 +94,7 @@ export const components = {pre: CodeBlock, table: Table}
     },
     {
       name: "Code",
-      url: "https://github.com/RomanHauksson/academic-project-astro-template",
+      url: "https://gitee.com/HowsenFisher/homugan",
       icon: "mdi:github",
     },
     {
@@ -86,61 +111,236 @@ export const components = {pre: CodeBlock, table: Table}
 
 ## Abstract
 
-This is a live demo for a template you can use to create a simple project page for your research paper. See the code for the template and instructions on how to use it yourself [here](https://github.com/RomanHauksson/academic-project-astro-template). It's made with the [Astro web framework](https://astro.build/) and styled with [Tailwind CSS](https://tailwindcss.com/). You write the content in [MDX](https://mdxjs.com/), which enables markdown formatting like **bold**, _italics_, and ~strikethrough~, as well as custom components like <SmallCaps>small caps.</SmallCaps>
+Controllable 3D-aware scene synthesis seeks to disentangle the various latent codes in the implicit space enabling the generation network to create highly realistic images with 3D consistency. Recent approaches often integrate Neural Radiance Fields with the upsampling method of StyleGAN2, employing Convolutions with style modulation to transform spatial coordinates into frequency domain representations. Our analysis indicates that this approach can give rise to a bubble phenomenon in StyleNeRF. We argue that the style modulation introduces extraneous information into the implicit space, disrupting 3D implicit modeling and degrading image quality. We introduce HomuGAN, incorporating two key improvements. First, we disentangle the style modulation applied to implicit modeling from that utilized for super-resolution, thus alleviating the bubble phenomenon. Second, we introduce Cylindrical Spatial-Constrained Sampling and Parabolic Sampling. The latter sampling method, as an alternative method to the former, specifically contributes to the performance of foreground modeling of vehicles. We evaluate HomuGAN on publicly available datasets, comparing its performance to existing methods. Empirical results demonstrate that our model achieves the best performance, exhibiting relatively outstanding disentanglement capability. Moreover, HomuGAN addresses the training instability problem observed in StyleNeRF and reduces the bubble phenomenon.
 
 </HighlightedSection>
 
-## Figures
+## Analysis
 
-Use the figure component to display images, videos, equations, or any other element, with an optional caption.
 
-<Figure
-    caption="Diagram of the transformer deep learning architecture."
-  >
-    <Image source={transformer} altText="Diagram of the transformer deep learning architecture." />
-</Figure>
 
-## Two columns
-
-Use the two columns component to display two columns of content. In this example, the first column contains a figure with a YouTube video and the second column contains a figure with a custom [React](https://react.dev/) component. By default, they display side by side, but if the screen is narrow enough (for example, on mobile), they're arranged vertically.
+### Problem Identification
+The analysis begins with a critical observation in StyleNeRF's performance: when trained on face datasets (AFHQ and FFHQ), the model produces noticeable distortions in generated images. These artifacts manifest as 'bubbles' and 'ripples' primarily around facial regions, significantly compromising the generation quality. Feature map analysis reveals that these bubble artifacts correspond to areas of disproportionately high activation in the NeRF component.
 
 <TwoColumns>
-  <Figure slot="left" caption="Take a look at this YouTube video.">
-    <YouTubeVideo videoId="wjZofJX0v4M" />
-  </Figure>
-  <Figure slot="right" caption="Now look at this Gaussian Splat, rendered with a React component.">
-    <Splat client:idle />
-  </Figure>
+<Figure slot="left" caption="We generate 108 human faces utilizing the StyleNeRF model trained with 7,000K iterations and identify 24 bad samples with distortion. The blue boxes represent high-frequency peaks, and the red boxes represent artifacts with smaller depths.">
+    <Image source={bubble_png} altText="Architecture of HomuGAN" />
+</Figure>
+<Figure slot="right" caption="The bubble artifacts in the image appear in the corresponding position of the feature map. The pink boxes represent the corresponding position of bubbles in the feature map.">
+    <Image source={bubble2_png} altText="Architecture of HomuGAN" />
+</Figure>
 </TwoColumns>
 
-## Heading levels
+In our preliminary experiments, disentangling various 3D control factors on vehicle datasets with large angular rotations proved difficult when employing the common NeRF sampling method for foreground and background modeling. When training the model from scratch on the CompCar dataset, an angle missing phenomenon arises during inference when rotating the vehicle. This phenomenon is also documented in GIRAFFE-HD. 
+<Figure caption="">
+    <Image source={rot_miss_png} altText="rot_miss_png" />
+</Figure>
 
-Use headings to divide your content into sections.
 
-### Heading 3
 
-Go down a level to heading 3...
+### Cause Analysis
+The root cause stems from two main aspects. First, the integration of style code in implicit modeling leads to style burrs and accumulation of larger weights in specific matrix regions, creating localized high-frequency peaks when combined with positional encoding. Second, when sampling points fail to adequately learn scene details, the generator compensates for this frequency deficiency by producing bubbles, either due to the loss of stylized features during volume rendering or the sparse sampling in certain areas hindering high-frequency representation. Additionally, style convolution tends to suppress other noises during implicit modeling, dominating the network output and affecting both shape/texture features and per-pixel style, which may explain StyleNeRF's inability to train on datasets like CompCar.
 
-#### Heading 4
+<LaTeX formula="
+    \begin{aligned}
+    &h_{N} = \prod_{n=0}^{N-1}(S_n \odot W_{n})\cdot \gamma_L(\overrightarrow{\mathbf{x}})
+    \end{aligned}
+" />
 
-...and down again to heading 4.
+<TwoColumns>
+<Figure slot="left" caption="StyleNeRF architecture diagram.">
+    <Image source={stylenerf_png} altText="stylenerf_png" />
+</Figure>
+<Figure slot="right" caption="An example of style code causing abnormally large values for features.">
+    <Image source={stylematrix_png} altText="stylematrix_png" />
+</Figure>
+</TwoColumns>
 
-## LaTeX
 
-You can also add LaTeX formulas, rendered during the build process using [KaTeX](https://katex.org/) so they're quick to load for visitors of your project page. You can write them inline, like this: <LaTeX inline formula="a^2 + b^2 = c^2" />. Or, you can write them as a block:
+We analyze the missing angles problem in vehicle generation where models can only rotate 180 degrees instead of full 360-degree views. This occurs when the network reaches a local optimal solution. Although the CompCar dataset contains vehicles with 360-degree rotations, the network can still match the original dataset's distribution by only generating front and rear views. We identify two main causes: first, when style code control becomes too strong, the front and rear views develop independent color distributions; second, when foreground-background decoupling is insufficient, the background collapses onto the foreground, causing the generator to focus solely on foreground fitting. In both cases, the model becomes trapped in this locally optimal solution.
 
-<LaTeX formula="\int_a^b f(x) dx" />
+<LaTeX formula="
+    \begin{aligned}
+    &P(R_{+}, C_{+}) + P(R_{-},C_{-})\\
+    &=P(R_{+}|C_{+})P(C_{+}) + P(R_{-}|C_{-})P(C_{-})\\
+    &=[P(R_{+}|C)+P(R_{-}|C)]P(C)\\
+    &=P(R_{+}\cup R_{-}|C)P(C)\\
+    &=P(R|C)P(C) = P(R,C)\\
+    &when \quad P(C_{+}) \sim P(C_{-}) \sim P(C)
+    \end{aligned}
+" />
 
-## Tables
+<TwoColumns>
+<Figure slot="left" caption="StyleNeRF architecture diagram.">
+    <Image source={local_car_png} altText="local_car_png" />
+</Figure>
+<Figure slot="right" caption="An example of style code causing abnormally large values for features.">
+    <Image source={local_png} altText="local_png" />
+</Figure>
+</TwoColumns>
 
-You can add simple tables using [GitHub Flavored Markdown syntax](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables):
+### Solution Design
+The analysis suggests that decoupling style noise from NeRF is a more suitable strategy for implicit modeling. By removing the style matrix from the equation and preventing the introduction of style information into the NeRF part, the model can avoid generating high feature amplitudes caused by high-frequency style code. This separation also prevents excessive loss of stylistic features during volume rendering, while maintaining a relatively low-frequency implicit space during modeling, which aligns with StyleGAN's design principles.
 
-| Model | Accuracy | F1 score | Training time (hours) |
-| :--- | :---: | :---: | :---: |
-| BERT-base | 0.89 | 0.87 | 4.5 |
-| RoBERTa-large | 0.92 | 0.91 | 7.2 |
-| DistilBERT | 0.86 | 0.84 | 2.1 |
-| XLNet | 0.90 | 0.89 | 6.8 |
+<LaTeX formula="
+    \begin{aligned}
+    &h_{n+1} = \prod_{n=0}^{N-1}(W_{n})\cdot \gamma_L(\overrightarrow{\mathbf{x}})
+    \end{aligned}
+" />
+
+## Methods
+HomuGAN's architecture and its operational pipeline. The model is designed with versatile input control, accepting five distinct types of noises - foreground shape, foreground texture, background shape, background texture, and style noise - along with a camera matrix. This design enables precise control over the generated object's posture, style, and shape, achieving effective disentanglement in the generation process.
+
+The architecture processes inputs through four sequential stages. In the point sampling stage, HomuGAN introduces two novel sampling methods: Cylindrical Spatial-Constrained Sampling and Parabolic sampling. The coordinate mapping stage implements a key improvement by disentangling style noise input for both implicit modeling and super-resolution, replacing traditional style convolutions with linear layers. For scene synthesis, the model adopts a direct summation approach for foreground and background features, where background features are scaled by the remaining light content. This method effectively enhances the disentanglement between foreground and background elements. The final super-resolution stage utilizes StyleGAN2's generator block for progressive upsampling, complemented by a ResNet-based discriminator architecture.
+
+The architecture incorporates several sophisticated design elements, including StyleGAN2's skip connection implementation and a progressive training mechanism with "fromRGB" modules at various resolutions. The entire pipeline is mathematically formulated to integrate multiple NeRF models with super-resolution modules, creating a robust framework for high-quality 3D-aware image generation. This comprehensive design addresses previous limitations in 3D-aware GANs while maintaining precise control over generation quality and object characteristics.
+
+<LaTeX formula="
+    \begin{aligned}
+    &G_{\theta}\left(\left\{\mathbf{z}_{s}^{i}, \mathbf{z}_{a}^{i}, \mathbf{T}_{i}\right\}_{i=1}^{N}, \mathbf{z}_w,\xi\right)=g_{\psi}(f^r,\mathbf{z}_w) \\
+    where 
+    \quad  f^c=&\left\{\pi_{\mathrm{com}}\left[F\left(\left\{\left\{M_{\theta_i}^{(i)}\left(\mathbf{x}_{j k},\mathbf{z}_s^i,\mathbf{z}_a^i\right)\right\}_{j=1}^{N_{s}}\right\}_{i=1}^N\right)\right]\right\}_{k=1}^{c \times c} \\
+    & \quad  \quad  \quad \quad and \quad   \theta= (\bigcup_{i=1}^{N} \theta_i) \bigcup \psi 
+    \end{aligned}
+" />
+
+<Figure caption="We separate the style code of implicit modeling and super-resolution (the yellow part). The discriminator (the blue part) uses the ResNet schema discriminator in StyleGAN2.  The generator consists of multiple NeRF networks, a mapping network, and a set of super-resolution modules.">
+    <Image source={arch_png} altText="Architecture of HomuGAN" />
+</Figure>
+
+The method was developed in response to the bubble artifacts problem, which stems from the model's limited capacity to fit high-frequency information. Through frequency analysis of FFHQ and AFHQ datasets using Haar wavelet decomposition, the research found that high-frequency information concentrates in specific regions - the sides and crown of human heads, and the ears and whiskers of cats. Notably, these high-frequency regions correlate strongly with the locations of bubble artifacts.
+
+<TwoColumns>
+<Figure slot="left" caption="The visualization results of high-frequency energy for face dataset FFHQ and cat face dataset AFHQ are demonstrated in the black images in the figure. The curves in the figure represent the statistical analysis of the 90\% energy threshold on the x-axis for the images in the two datasets.">
+    <Image source={xiaobo_png} altText="xiaobo_png" />
+</Figure>
+<Figure slot="right" caption="The Cylindrical Spatial-Constrained Sampling discards some sampling points that do not require training during normal foreground sampling, as these points do not contribute to implicit modeling.">
+    <Image source={cylinder_good_png} altText="cylinder_good_png" />
+</Figure>
+</TwoColumns>
+
+
+To address this issue, the paper introduces Cylindrical Spatial-Constrained Sampling, which confines sampling points within a cylindrical volume. This approach offers three key advantages: First, it restricts sampling to relevant areas, eliminating unnecessary sampling points outside the region of interest. Second, the cylindrical geometry naturally provides denser sampling near the edges where high-frequency information typically concentrates. Third, it prevents depth-drift artifacts near the edges by avoiding depth modeling in those regions.
+
+<Figure caption="Three Different Sampling Methods for Neural Radiance Fields.} The figure shows the sampling methods for the foreground and background of GRAF, GIRAFFE, GIRAFFE-HD, and StyleNeRF, and compares them with our Cylindrical Spatial-Constrained Sampling (Cylinder) and Parabolic sampling (Para). For Cylindrical Spatial-Constrained Sampling, it can form different sampling densities at different sampling positions. The background sampling space is sandwiched between two cylindrical surfaces, with a geometric shape similar to a screen in a cinema. For parabolic sampling, the sampling points of the background are projected onto a plane that disregards depth.">
+    <Image source={sample_png} altText="sampling methods" />
+</Figure>
+
+<LaTeX formula="
+    \begin{aligned}
+        \delta(r) = &(X_{d}^{2}+Y_{d}^{2})\cdot r^{2}-X_{d}^{2}\cdot Y_{0}^{2}-Y_{d}^{2}\cdot X_{0}^{2} \\
+        &+ 2X_{0}\cdot X_{d}\cdot Y_{0}\cdot Y_{d} \\
+        t_{near}^{fg} =& \frac{(-X_{0}\cdot X_{d} - Y_{0} \cdot Y_{d} - \sqrt{\delta(r)})}{(X_{d}^2+Y_{d}^2)}\\
+        t_{far}^{fg} =& \frac{(-X_{0}\cdot X_{d} - Y_{0} \cdot Y_{d} + \sqrt{\delta(r)})}{(X_{d}^2+Y_{d}^2)}
+    \end{aligned}
+" />
+
+<LaTeX formula="
+    \begin{aligned}
+        t_{near}^{bg} =& \frac{(-X_{0}\cdot X_{d} - Y_{0} \cdot Y_{d} + \sqrt{\delta(r_1)})}{(X_{d}^2+Y_{d}^2)}\\
+        t_{far}^{bg} =& \frac{(-X_{0}\cdot X_{d} - Y_{0} \cdot Y_{d} + \sqrt{\delta(r_2)})}{(X_{d}^2+Y_{d}^2)}
+    \end{aligned}
+  " />
+
+
+The implementation involves two components: foreground sampling within a central cylinder and background sampling between two cylindrical surfaces forming a cinema screen-like structure. The method uses mathematical formulations to determine sampling depth ranges for both foreground and background, with specific considerations for camera position and ray direction. This design effectively improves the model's ability to capture high-frequency details while maintaining computational efficiency and preventing common artifacts.
+
+
+
+We introduce Parabolic Sampling to address the limitations of Cylindrical Spatial-Constrained Sampling in handling 360-degree panoramic scenes, particularly for datasets like CompCar that require complete vehicle views. Our method employs a parabolic surface behind the foreground, with its focal point at the world coordinate origin, to map background rays onto parallel ray groups.
+
+<LaTeX formula="
+    \begin{aligned}
+        \delta = &X_{d}^{2}+Y_{d}^{2}+Z_{d}^2 \\
+        t =& \frac{(-X_{d} + \sqrt{\delta})}{(Y_{d}^2+Z_{d}^2)}\\
+    \end{aligned}
+" />
+
+By discarding the x-axis dimension after parabolic reflection, we transform the 3D background modeling into a 2D task, reducing network parameters and computational costs while constraining camera poses to a bounded plane. This design accelerates background representation learning and improves foreground-background separation, making our method particularly efficient for panoramic background generation.
+
+
+## Evaluation
+### Quality evaluation
+Our experimental results demonstrate comprehensive improvements across multiple aspects. Quantitatively, our model with Cylindrical Spatial-Constrained Sampling achieves superior FID and KID scores on FFHQ, AFHQv2, and CompCar datasets at various resolutions, outperforming both camera-free and foreground-background disentangled models. While Parabolic Sampling shows slightly lower performance, it still exceeds baselines for CompCar and AFHQ, particularly excelling in vehicle modeling.
+
+<Figure caption="Comparison of synthesized images at a resolution of 256. GIRAFFE and PIGAN generate highly unrealistic images, while StyleNeRF exhibits deviations in facial orientations and produces cat faces with obvious bubble artifacts.">
+    <Image source={comp_png} altText="comp_png" />
+</Figure>
+
+
+<Figure caption="Comparison of synthesized images at a resolution of 256. GIRAFFE and PIGAN generate highly unrealistic images, while StyleNeRF exhibits deviations in facial orientations and produces cat faces with obvious bubble artifacts.">
+    <Image source={table_png} altText="table_png" />
+</Figure>
+
+### Anomaly evaluation
+The results demonstrate the capacity of our model to produce low anomaly outputs, as measured by both manual screening and automated anomaly evaluation.This suggests that samples from our model exhibit a relatively low incidence of bubble artifacts or failed samples.
+
+<Figure caption="The first set presents manually counted samples with bubble artifacts and generated failures. The second set demonstrates two metrics proposed in this paper, utilizing image deviation calculated by existing image inpainting and denoising networks.">
+    <Image source={bb_png} altText="bb_png" />
+</Figure>
+
+### 3D consistency evaluation
+
+We evaluate our model's effectiveness through multiple metrics. Manual screening and automated evaluation confirm that our model significantly reduces bubble artifacts and anomalies in generated samples. To assess 3D consistency, we employ ArcFace for face similarity measurement between different views and Deep3DFaceRecon for pose accuracy evaluation. Our method achieves the highest 3D consistency among models that support foreground-background disentanglement and operate without camera annotations. We further validate our results using COLMAP reconstruction from multiple viewpoints, demonstrating that our model consistently produces high-quality, 3D-consistent images with minimal artifacts.
+
+<Figure caption="Compared to EG3D and EpiGRAF, our model generates more reasonable facial geometry under 512 resolution image training, and avoids transition smoothing problem with EG3D.">
+    <Image source={mrc_comp_png} altText="mrc_comp_png" />
+</Figure>
+
+
+<TwoColumns>
+<Figure slot="left" caption="Comparison of 3D consistency metrics for baselines and our model at 256 pixels.">
+    <Image source={consis_table_png} altText="consis_table_png" />
+</Figure>
+<Figure slot="right" caption="The reconstructed face results using COLMAP software.">
+    <Image source={colmap_png} altText="colmap_png" />
+</Figure>
+</TwoColumns>
+
+
+### Controllable evaluation
+We evaluate the controllability of different models by varying noise inputs. While StyleNeRF exhibits a deactivation phenomenon where only style noise affects the output (due to its style modulation in implicit modeling), our model maintains effective control over all noise types. In comparison, GIRAFFE shows strong foreground-background control but lacks style control, and EG3D relies solely on style noise without foreground-background differentiation. Our model achieves balanced control across all aspects, demonstrating superior controllability over existing approaches.
+<TwoColumns>
+<Figure slot="left" caption="Qualitative demonstration of controllability of some baselines and our model.">
+    <Image source={control_table_png} altText="control_table_png" />
+</Figure>
+<Figure slot="right" caption="The controllable synthesis achieved by our model (cylinder).">
+    <Image source={control_png} altText="control_png" />
+</Figure>
+</TwoColumns>
+
+### Sampling methods comparison
+Experimental findings indicate that the original NeRF sampling method is suboptimal for producing high-fidelity images. In contrast, our proposed method, employing Cylinder-based sampling for both foreground and background, yields optimal performance. While Para demonstrates similar results to Cylindrical Spatial-Constrained Sampling on the CompCar dataset and exhibits strong foreground vehicle modeling (as evaluated by three-dimensional consistency metrics), it introduces background flickering. Moreover, parabolic sampling significantly reduces performance on the FFHQ dataset. Considering these performance trade-offs, we classify this modeling strategy as an optional optimization.
+
+<TwoColumns>
+<Figure slot="left" caption="Comparison of FID and KID under different sampling methods of foreground and background at 256 pixels.">
+    <Image source={diff_sample_png} altText="diff_sample_png" style={{width: "80%"}} />
+</Figure>
+<Figure slot="right" caption="Different sampling methods.">
+    <Image source={sampling2_png} altText="sampling2_png" style={{width: "80%"}} />
+</Figure>
+</TwoColumns>
+
+### Stable Comparison
+A comparison of StyleNeRF and EG3D with our model indicates differences in FID fluctuation throughout training on CompCar. As Figure illustrates, our model not only exhibits superior FID scores but also demonstrates a relatively consistent and rapid convergence. Our model can train stably on CompCar without the occurrence of mode collaps.
+
+<Figure caption="Training compare between EG3D, StyleNeRF and our models (cylinder) at $256^2$ pixels on CompCar.">
+    <Image source={stable_png} altText="stable_png" />
+</Figure>
+
+### Reintroducing style noise
+To validate our design choice of removing style noise, we conducted a comparative experiment by reintroducing style noise into our model's architecture. Feature map visualization and anomaly metrics demonstrate that the presence of style noise generates unwanted high-frequency features and increases artifacts, confirming the effectiveness of our style noise removal strategy.
+
+<TwoColumns>
+<Figure slot="left" caption="Qualitative results of the ablation experiment on reintroducing style noise.">
+    <Image source={style_inject_png} altText="style_inject_png" />
+</Figure>
+<Figure slot="right" caption="The quantitative ablation results with and without the reintroduced style noise are evaluated by calculating two metrics that assess image anomalies at $32^3$ implicit resolution.">
+    <Image source={feat_comp_png} altText="feat_comp_png" />
+</Figure>
+</TwoColumns>
+
+
 
 ## BibTeX citation
 
